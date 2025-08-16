@@ -13,7 +13,7 @@ config: Config = load_config()
 client = replicate.Client(api_token=config.seedance.api_key)
 
 
-async def get_seedance_video(prompt: str, duration: Literal[5, 10], sizes: Literal["16:9", "9:16"], image: str | None = None) -> str:
+async def get_seedance_video(prompt: str, model: Literal['seedance-1-pro', 'seedance-1-lite'], duration: Literal[5, 10], sizes: Literal["16:9", "9:16"], image: str | None = None) -> str:
     data = {
         'prompt': prompt,
         'duration': duration,
@@ -23,7 +23,7 @@ async def get_seedance_video(prompt: str, duration: Literal[5, 10], sizes: Liter
         data['image'] = image
     try:
         output = await client.predictions.async_create(
-            model="bytedance/seedance-1-lite",
+            model=f"bytedance/{model}",
             input=data
         )
     except Exception as err:

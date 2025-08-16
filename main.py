@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from worker.tasks import TaskWorker
 from models.gen_models import GenerationResponse
 from server import UvicornServer
-from generates import (get_seedance_video, get_veo_video, get_kling_video)
+from generates import (get_seedance_video, get_veo_video, get_kling_video, get_hailuo_video)
 
 
 # Создаём приложение
@@ -28,16 +28,20 @@ async def generate(request: GenerationResponse):
         elif model == 'kling-v2.1-master':
             func = get_kling_video
             args = [prompt, request.duration, request.aspect_ratio, image]
+        elif model in ['hailuo-02-fast', 'hailuo-02']:
+            func = get_hailuo_video
+            args = [prompt, model, image]
         else:
             func = get_seedance_video
-            args = [prompt, request.duration, request.aspect_ratio, image]
+            args = [prompt, model, request.duration, request.aspect_ratio, image]
 
         task_id = str(uuid.uuid4())
         await worker.add_task(task_id, func, args)
         return {
             'task_id': task_id
         }
-    except Exception:
+    except Exception as err:
+        print(err)
         return HTTPException(500, detail='Ошибка при создании задачи на генерацию')
 
 
