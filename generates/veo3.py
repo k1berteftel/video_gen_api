@@ -41,6 +41,7 @@ async def get_veo_video(prompt: str, model: Literal['veo3_quality', 'veo3_fast']
     }
     if image:
         data['image_url'] = image
+        data["aspect_ratio"] = "9:16"
     async with aiohttp.ClientSession() as client:
         async with client.post(url, headers=headers, json=data) as response:
             if response.status != 200:
@@ -51,3 +52,6 @@ async def get_veo_video(prompt: str, model: Literal['veo3_quality', 'veo3_fast']
                 raise InputGenerationError(error)
             task_id = data['id']
     return await _poll_generation(task_id)
+
+
+#print(asyncio.run(get_veo_video('Сделай видое прямоходящей обезьяны', 'veo3_fast')))
