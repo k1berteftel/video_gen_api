@@ -24,11 +24,10 @@ async def _poll_generation(task_id: str):
                 if response.status != 200:
                     raise AIGenerationError()
                 data = await response.json()
-                if data['success'] != True:
-                    error = f'{data["code"]}: {data["message"]}'
-                    raise AIGenerationError(error)
+                if data['data']['status'] == 'failed':
+                    raise AIGenerationError(f'{data['data']['error']['code']}: {data['data']['error']['message']}')
                 if data['data']['status'] == 'completed':
-                    return data['data']['video_url']
+                    return data['data']['output']['video_url']
                 await asyncio.sleep(4)
 
 
@@ -49,9 +48,9 @@ async def get_kling_video(prompt: str, duration: Literal[5, 10], sizes: Literal[
             if response.status != 200:
                 raise InputGenerationError(await response.content.read())
             data = await response.json()
-            if data['success'] != True:
-                error = f'{data["code"]}: {data["message"]}'
+            if data['code'] != 200:
+                error = f'{data["code"]}: {data['data']['error']["message"]}'
                 raise InputGenerationError(error)
-            task_id = data['data']['id']
+            task_id = data['data']['task_id']
     return await _poll_generation(task_id)
 
