@@ -25,7 +25,7 @@ async def _poll_generation(task_id: str):
                     raise AIGenerationError()
                 data = await response.json()
                 if data['data']['status'] == 'failed':
-                    raise AIGenerationError(f'{data['data']['error']['code']}: {data['data']['error']['message']}')
+                    raise AIGenerationError(f"{data['data']['error']['code']}: {data['data']['error']['message']}")
                 if data['data']['status'] == 'completed':
                     return data['data']['output']['video_url']
                 await asyncio.sleep(4)
