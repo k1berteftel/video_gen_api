@@ -47,7 +47,7 @@ async def get_veo_video(prompt: str, model: Literal['veo3_quality', 'veo3_fast']
                 raise InputGenerationError(await response.content.read())
             data = await response.json()
             if data['code'] != 200:
-                error = f'{data["code"]}: {data['data']['error']["message"]}'
+                error = f"{data['code']}: {data['data']['error']['message']}"
                 raise InputGenerationError(error)
             task_id = data['data']['task_id']
     return await _poll_generation(task_id)
