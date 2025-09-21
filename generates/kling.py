@@ -49,7 +49,7 @@ async def get_kling_video(prompt: str, duration: Literal[5, 10], sizes: Literal[
                 raise InputGenerationError(await response.content.read())
             data = await response.json()
             if data['code'] != 200:
-                error = f"{data["code"]}: {data['data']['error']['message']}"
+                error = f"{data['code']}: {data['data']['error']['message']}"
                 raise InputGenerationError(error)
             task_id = data['data']['task_id']
     return await _poll_generation(task_id)
