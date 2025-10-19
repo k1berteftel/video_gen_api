@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from worker.tasks import TaskWorker
 from models.gen_models import GenerationResponse
 from server import UvicornServer
-from generates import (get_seedance_video, get_veo_video, get_kling_video, get_hailuo_video)
+from generates import (get_seedance_video, get_veo_video, get_kling_video, get_hailuo_video, get_sora_video)
 
 
 # Создаём приложение
@@ -31,6 +31,9 @@ async def generate(request: GenerationResponse):
         elif model in ['hailuo-02-fast', 'hailuo-02']:
             func = get_hailuo_video
             args = [prompt, model, image]
+        elif model == 'sora-2':
+            func = get_sora_video
+            args = [prompt, request.duration, request.aspect_ratio, image]
         else:
             func = get_seedance_video
             args = [prompt, model, request.duration, request.aspect_ratio, image]
