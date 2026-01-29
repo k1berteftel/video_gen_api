@@ -17,7 +17,7 @@ headers = {
 
 
 async def _poll_generation(task_id: str):
-    url = f'https://api.unifically.com/kling/v1/videos/generations/{task_id}'
+    url = f'https://api.unifically.com/v1/tasks/{task_id}'
     async with aiohttp.ClientSession() as client:
         while True:
             async with client.get(url, headers=headers) as response:
@@ -33,15 +33,16 @@ async def _poll_generation(task_id: str):
 
 async def get_kling_video(prompt: str, duration: Literal[5, 10], sizes: Literal["16:9", "9:16"], image: str | None = None) -> str:
     prompt = await translate_text(prompt)
-    url = 'https://api.unifically.com/kling/v1/videos/generations'
+    url = 'https://api.unifically.com/v1/tasks'
     data = {
-        "model": "2.1-master",
-        "prompt": prompt,
-        "duration": duration,
-        "aspect_ratio": sizes
+        "model": "kuaishou/kling-2.1-std",
+        "input": {
+            "prompt": prompt,
+            "duration": duration
+        }
     }
     if image:
-        data['image_url'] = image
+        data['start_image_url'] = image
 
     async with aiohttp.ClientSession() as client:
         async with client.post(url, headers=headers, json=data) as response:

@@ -32,6 +32,7 @@ async def _poll_generation(task_id: str):
 
 
 async def get_veo_video(prompt: str, model: Literal['veo3_quality', 'veo3_fast'], image: str | None = None) -> str:
+    # TODO: Все нахуй переделать
     prompt = await translate_text(prompt)
     url = 'https://api.unifically.com/veo-3/generate'
     data = {
