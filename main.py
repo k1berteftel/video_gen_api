@@ -30,7 +30,7 @@ async def generate(request: GenerationResponse):
             args = [prompt, request.duration, request.aspect_ratio, image]
         elif model in ['hailuo-02-fast', 'hailuo-02']:
             func = get_hailuo_video
-            args = [prompt, model, image]
+            args = [prompt, model, request.duration, image]
         elif model == 'sora-2':
             func = get_sora_video
             args = [prompt, request.duration, request.aspect_ratio, image]

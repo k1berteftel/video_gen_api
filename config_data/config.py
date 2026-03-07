@@ -18,10 +18,16 @@ class Lingvanex:
 
 
 @dataclass
+class APIMart:
+    api_key: str
+
+
+@dataclass
 class Config:
     unifically: Unifically
     seedance: Seedance
     lingvanex: Lingvanex
+    apimart: APIMart
 
 
 def load_config(path: str | None = None) -> Config:
@@ -37,5 +43,8 @@ def load_config(path: str | None = None) -> Config:
         ),
         lingvanex=Lingvanex(
             api_key=env('lingvanex_api_key')
+        ),
+        apimart=APIMart(
+            api_key=env('apimart_api_key')
         )
     )
